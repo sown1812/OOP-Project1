@@ -1,0 +1,9 @@
+cc: 3
+vit: 11
+mnh: 10
+vn: 7
+y: 5
+hello: 1
+do: 9
+bn: 4, 8
+l: 6
