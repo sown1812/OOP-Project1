@@ -1,0 +1,87 @@
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #2e2e2e, #000000); /* Gradient từ xám đậm sang đen */
+    -fx-alignment: center;
+}
+/* Ô nhập từ khóa */
+.search-field {
+    -fx-font-size: 14px;
+    -fx-padding: 6px;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-pref-width: 300px;
+}
+.follow-field{
+    -fx-font-size: 14px;
+    -fx-padding: 6px;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-pref-width: 120px;
+}
+/* Nút tìm kiếm */
+.search-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #000000, #2C2C2C);
+    -fx-text-fill: #FFFFE0;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.2), 5, 0, 0, 2);
+    -fx-padding: 10px;
+    -fx-pref-width: 96px;
+}
+.table-view {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0.5px;
+    -fx-padding: 10px;
+}
+.table-column {
+    -fx-alignment: center-left;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-padding: 5px 10px;
+    -fx-background-color: #ffffff;
+}
+
+.hyperlink {
+    -fx-text-fill: #1a73e8;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: #0d56c4;
+}
+.tab-pane {
+    -fx-background-color: white; /* Nền của TabPane */
+    -fx-border-color: #ddd; /* Đường viền của TabPane */
+    -fx-border-width: 1px;  /* Độ dày đường viền */
+}
+
+/* Định kiểu cho tab chưa được chọn */
+.tab {
+    -fx-border-color: transparent; /* Loại bỏ viền */
+    -fx-background-color: #f0f0f0;  /* Nền sáng cho tab không được chọn */
+    -fx-text-fill: #333;             /* Chữ màu đen cho tab không được chọn */
+    -fx-border-radius: 10px; /* Bo tròn cả góc trên và dưới */
+}
+
+/* Tab đã được chọn */
+.tab:selected {
+    -fx-border-color: transparent; /* Xóa viền khi tab được chọn */
+    -fx-background-color: #ffffff;  /* Nền trắng cho tab đã chọn */
+    -fx-text-fill: #000000;          /* Màu chữ đen cho tab đã chọn */
+    -fx-font-weight: bold;          /* Font chữ đậm cho tab đã chọn */
+    -fx-border-radius: 10px 10px 0 0; /* Bo tròn góc trên cho tab */
+    -fx-effect: null;
+}
+
+/* Hiệu ứng khi di chuột vào tab chưa chọn */
+.tab:hover {
+    -fx-background-color: #e0e0e0; /* Màu nền hơi tối hơn khi hover */
+    -fx-text-fill: #333; /* Màu chữ khi hover */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0.5, 0, -2); /* Hiệu ứng đổ bóng nhẹ khi hover */
+}
