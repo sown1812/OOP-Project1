@@ -31,17 +31,41 @@ public class main {
             wait[i] = new WebDriverWait(driver[i], Duration.ofSeconds(180));
         }
 
+        String[][] accounts = {
+                {"@tran_key666", "Key123456", "ahkey357@gmail.com"},
+                {"@tran_key579", "Key123456", "ahkey579@gmail.com"},
+                {"@hust_21503", "hudvat-7qoHfi-todryv", "projecthustoop@gmail.com"},
+                {"@HustOop345399", "sundi4-guhMob-dopvun", "projecthustoop@gmail.com"},
+                {"@project3834884", "gAkkoj-xifvy9-zirmuj", "projecthustoop@gmail.com"}
+        };
+
         Log L = new Log();
         Write W = new Write();
         Find F = new Find();
         try {
-            L.Log_in(driver[0], wait[0], "@tran_key666", "Key123456", "ahkey357@gmail.com");
-            L.Log_in(driver[1], wait[1], "@tran_key579", "Key123456", "ahkey579@gmail.com");
-            L.Log_in(driver[2], wait[2], "@hust_21503", "hudvat-7qoHfi-todryv", "projecthustoop@gmail.com");
-            L.Log_in(driver[3], wait[3], "@HustOop345399", "sundi4-guhMob-dopvun", "projecthustoop@gmail.com");
-            L.Log_in(driver[4], wait[4], "@project3834884", "gAkkoj-xifvy9-zirmuj", "projecthustoop@gmail.com");
+            ExecutorService executorService = Executors.newFixedThreadPool(5);
+            List<Future<Void>> futures = new ArrayList<>();
+            for (int i = 0; i < accounts.length; i++) {
+                final int index = i;
+                Future<Void> future = executorService.submit(() -> {
+                    L.Log_in(driver[index], wait[index], accounts[index][0], accounts[index][1], accounts[index][2]);
+                    return null;
+                });
+                futures.add(future);
+            }
+
+            for (Future<Void> future : futures) {
+                try {
+                    future.get(); // Chờ cho mỗi task hoàn thành
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            executorService.shutdown();
 
             System.out.println("Dang nhap thanh cong");
+            W.writeToFile("KOL.txt", "", false);
             try (BufferedReader br = new BufferedReader(new FileReader("hastag.txt"))) {
                 String acc;
                 W.writeToFile("KOL.txt", "", false);
@@ -56,9 +80,9 @@ public class main {
             }
 
             W.writeToFile("tweets.txt", "", false);
-            ExecutorService executorService = Executors.newFixedThreadPool(5);
+            executorService = Executors.newFixedThreadPool(5);
 
-            List<Future<Void>> futures = new ArrayList<>();
+            futures = new ArrayList<>();
 
             try (BufferedReader br = new BufferedReader(new FileReader("KOL.txt"))) {
                 String acc;
@@ -68,7 +92,8 @@ public class main {
                     String url = parts[parts.length - 1];
 
                     Future<Void> future = executorService.submit(new FindTaskCallable(driver[driverIndex], wait[driverIndex], url,
-                            "article[role='article']", "a[href*='/status/']", 5, 0, "tweets.txt", driver, 5000, 2000));
+                            "article[role='article']", "a[href*='/status/']", 5, 0,
+                            "tweets.txt", driver, 5000, 2000));
 
                     futures.add(future);
 
@@ -89,6 +114,7 @@ public class main {
 
             W.writeToFile("edge.txt", "", false);
 
+            executorService = Executors.newFixedThreadPool(5);
             futures = new ArrayList<>();
 
             try (BufferedReader br = new BufferedReader(new FileReader("tweets.txt"))) {
@@ -97,7 +123,8 @@ public class main {
                 while ((tweet = br.readLine()) != null) {
 
                     Future<Void> future = executorService.submit(new FindTaskCallable(driver[driverIndex], wait[driverIndex], tweet,
-                            "article[role='article']", "a[href*='/status/']", MAX, 2, "edge.txt", driver, 5000, 2000));
+                            "article[role='article']", "a[href*='/status/']", MAX, 2, "edge.txt",
+                            driver, 5000, 2000));
 
                     futures.add(future);
 
@@ -117,8 +144,8 @@ public class main {
             executorService.shutdown();
 
             W.writeToFile("edge2.txt", "", false);
-
-           futures = new ArrayList<>();
+            executorService = Executors.newFixedThreadPool(5);
+            futures = new ArrayList<>();
 
             try (BufferedReader br = new BufferedReader(new FileReader("tweets.txt"))) {
                 String tweet;
