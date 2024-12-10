@@ -11,7 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Find {
-    public void Find_user(WebDriver driver, WebDriverWait wait, String url, String user_f, String user_p, int Size, int needcheck, String filePath, WebDriver[] drivers, int delay, int step) {
+    public void Find_user(WebDriver driver, WebDriverWait wait, String url, String user_f, String user_p, int Size,
+                          int needcheck, String filePath, WebDriver[] drivers, int delay, int step) {
         Write W = new Write();
         System.out.println(url);
         driver.get(url);
@@ -85,7 +86,7 @@ public class Find {
         }
         if(needcheck == 1){
             Check check = new Check();
-            check.Check_KOL(userProfileUrls, "KOL.txt", drivers);
+            check.Check_KOL(userProfileUrls, "userinterface.KOL.txt", drivers);
             System.out.println("finish " + url);
         } else
             if(needcheck == 0){

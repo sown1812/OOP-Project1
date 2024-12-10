@@ -68,15 +68,15 @@ public class main {
             executorService.shutdown();
 
             System.out.println("Dang nhap thanh cong");
-            W.writeToFile("KOL.txt", "", false);
+            W.writeToFile("userinterface.KOL.txt", "", false);
             try (BufferedReader br = new BufferedReader(new FileReader("hastag.txt"))) {
                 String acc;
-                W.writeToFile("KOL.txt", "", false);
+                W.writeToFile("userinterface.KOL.txt", "", false);
                 while ((acc = br.readLine()) != null){
                     System.out.println(acc);
                     acc = "https://twitter.com/search?q=%23" + acc + "&src=recent_search_click&f=user";
                     F.Find_user(driver[0], wait[0], acc, "button[role='button']", "a[href*='/']", 30, 1,
-                    "KOL.txt", driver, 10000, 3300);
+                    "userinterface.KOL.txt", driver, 10000, 3300);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -87,7 +87,7 @@ public class main {
 
             futures = new ArrayList<>();
 
-            try (BufferedReader br = new BufferedReader(new FileReader("KOL.txt"))) {
+            try (BufferedReader br = new BufferedReader(new FileReader("userinterface.KOL.txt"))) {
                 String acc;
                 int driverIndex = 0;
                 while ((acc = br.readLine()) != null) {
