@@ -1,0 +1,56 @@
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #2e2e2e, #000000); /* Gradient từ xám đậm sang đen */
+    -fx-alignment: center;
+}
+/* Ô nhập từ khóa */
+.search-field {
+    -fx-font-size: 14px;
+    -fx-padding: 6px;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-pref-width: 300px;
+}
+.follow-field{
+    -fx-font-size: 14px;
+    -fx-padding: 6px;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-pref-width: 100px;
+}
+/* Nút tìm kiếm */
+.search-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #000000, #2C2C2C);
+    -fx-text-fill: #FFFFE0;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.2), 5, 0, 0, 2);
+    -fx-padding: 8px;
+}
+.table-view {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0.5px;
+    -fx-padding: 10px;
+}
+.table-column {
+    -fx-alignment: center-left;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-padding: 5px 10px;
+    -fx-background-color: #ffffff;
+}
+
+.hyperlink {
+    -fx-text-fill: #1a73e8;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: #0d56c4;
+}
