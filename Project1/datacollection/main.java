@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class main {
+    public static final int D = 7;
     public static final int MAX = 9999;
     public static void main(String[] args) {
         System.setProperty("webdriver.edge.driver", "D:\\Code\\Edgedriver\\msedgedriver.exe");
@@ -26,7 +27,7 @@ public class main {
 
         WebDriver[] driver = new WebDriver[10];
         WebDriverWait[] wait = new WebDriverWait[10];
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < D; i++) {
             driver[i] = new EdgeDriver(options);
             wait[i] = new WebDriverWait(driver[i], Duration.ofSeconds(180));
         }
@@ -34,16 +35,18 @@ public class main {
         String[][] accounts = {
                 {"@tran_key666", "Key123456", "ahkey357@gmail.com"},
                 {"@tran_key579", "Key123456", "ahkey579@gmail.com"},
-                {"@hust_21503", "hudvat-7qoHfi-todryv", "projecthustoop@gmail.com"},
-                {"@HustOop345399", "sundi4-guhMob-dopvun", "projecthustoop@gmail.com"},
-                {"@project3834884", "gAkkoj-xifvy9-zirmuj", "projecthustoop@gmail.com"}
+                {"hust_21503", "hudvat-7qoHfi-todryv", "p.rojecthustoop@gmail.com"},
+                {"HustOop345399", "sundi4-guhMob-dopvun", "pr.ojecthustoop@gmail.com"},
+                {"project3834884", "gAkkoj-xifvy9-zirmuj", "pro.jecthustoop@gmail.com"},
+                {"hust_445531", "Tycdib-behneb-5zavze", "proj.ecthustoop@gmail.com"},
+                {"HustOop568799", "Fifryn-2xavky-tajnev", "proje.cthustoop@gmail.com"},
         };
 
         Log L = new Log();
         Write W = new Write();
         Find F = new Find();
         try {
-            ExecutorService executorService = Executors.newFixedThreadPool(5);
+            ExecutorService executorService = Executors.newFixedThreadPool(D);
             List<Future<Void>> futures = new ArrayList<>();
             for (int i = 0; i < accounts.length; i++) {
                 final int index = i;
@@ -80,7 +83,7 @@ public class main {
             }
 
             W.writeToFile("tweets.txt", "", false);
-            executorService = Executors.newFixedThreadPool(5);
+            executorService = Executors.newFixedThreadPool(D);
 
             futures = new ArrayList<>();
 
@@ -97,7 +100,7 @@ public class main {
 
                     futures.add(future);
 
-                    driverIndex = (driverIndex + 1) % 5;
+                    driverIndex = (driverIndex + 1) % D;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -114,7 +117,7 @@ public class main {
 
             W.writeToFile("edge.txt", "", false);
 
-            executorService = Executors.newFixedThreadPool(5);
+            executorService = Executors.newFixedThreadPool(D);
             futures = new ArrayList<>();
 
             try (BufferedReader br = new BufferedReader(new FileReader("tweets.txt"))) {
@@ -128,7 +131,7 @@ public class main {
 
                     futures.add(future);
 
-                    driverIndex = (driverIndex + 1) % 5;
+                    driverIndex = (driverIndex + 1) % D;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -144,7 +147,7 @@ public class main {
             executorService.shutdown();
 
             W.writeToFile("edge2.txt", "", false);
-            executorService = Executors.newFixedThreadPool(5);
+            executorService = Executors.newFixedThreadPool(D);
             futures = new ArrayList<>();
 
             try (BufferedReader br = new BufferedReader(new FileReader("tweets.txt"))) {
@@ -158,7 +161,7 @@ public class main {
 
                     futures.add(future);
 
-                    driverIndex = (driverIndex + 1) % 5;
+                    driverIndex = (driverIndex + 1) % D;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -173,7 +176,7 @@ public class main {
             }
             executorService.shutdown();
         } finally {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < D; i++) {
                 driver[i].quit();
             }
         }

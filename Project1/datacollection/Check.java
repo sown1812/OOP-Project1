@@ -16,11 +16,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Check {
-
+    public static final int D = 7;
     public void Check_KOL(HashSet<String> userProfileUrls, String filePath, WebDriver[] drivers) {
         Write W = new Write();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(5); // Tạo số lượng thread = số lượng WebDriver
+        ExecutorService executorService = Executors.newFixedThreadPool(D); // Tạo số lượng thread = số lượng WebDriver
         List<Future<Void>> futures = new ArrayList<>();
         int driverIndex = 0; // Biến chỉ mục để chọn driver từ danh sách
 
@@ -30,7 +30,7 @@ public class Check {
             futures.add(future);
 
             // Cập nhật chỉ mục để vòng qua các driver
-            driverIndex = (driverIndex + 1) % 5;
+            driverIndex = (driverIndex + 1) % D;
         }
 
         for (Future<Void> future : futures) {
@@ -62,7 +62,6 @@ public class Check {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 
             try {
-                System.out.println(userProfileUrl + "     in");
                 driver.get(userProfileUrl);
 
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='/verified_followers']")));

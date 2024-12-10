@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class Log {
+    public static final int D = 7;
     public void Log_in(WebDriver driver, WebDriverWait wait, String acc, String pass, String gmail) {
         try {
             driver.get("https://twitter.com/login");
@@ -20,13 +21,19 @@ public class Log {
             WebElement nextButton = driver.findElement(By.xpath("//span[text()='Next']"));
             nextButton.click();
 
-            WebDriverWait waitf = new WebDriverWait(driver, Duration.ofSeconds(1));
+            WebDriverWait waitf = new WebDriverWait(driver, Duration.ofSeconds(2));
             try {
-                WebElement emailField = waitf.until(ExpectedConditions.presenceOfElementLocated(By.name("text")));
-                emailField.sendKeys(gmail);
+                waitf.until(ExpectedConditions.presenceOfElementLocated(By.name("text")));
+                WebElement check = driver.findElement(By.name("text"));
+                check.sendKeys(gmail);
+                WebElement nextButton_2 = driver.findElement(By.xpath("//span[text()='Next']"));
+                nextButton_2.click();
 
-                WebElement verifyButton = driver.findElement(By.xpath("//span[text()='Next']"));
-                verifyButton.click();
+//                WebElement emailField = waitf.until(ExpectedConditions.presenceOfElementLocated(By.name("text")));
+//                emailField.sendKeys(gmail);
+//
+//                WebElement verifyButton = driver.findElement(By.xpath("//span[text()='Next']"));
+//                verifyButton.click();
             } catch (Exception e) {
             }
 

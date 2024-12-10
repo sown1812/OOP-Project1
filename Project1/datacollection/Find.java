@@ -22,7 +22,7 @@ public class Find {
 
         Number scrollPositionBefore = (Number) js.executeScript("return window.scrollY");
         try {
-            Thread.sleep(10000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -39,22 +39,21 @@ public class Find {
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(user_f)));
             List<WebElement> users = driver.findElements(By.cssSelector(user_f));
 
-
+            System.out.print("User: ");
             System.out.println(users.size());
             for (WebElement user : users){
                 try {
                     WebElement userProfileLink = user.findElement(By.cssSelector(user_p));
                     String userProfileUrl = userProfileLink.getAttribute("href");
+                    String usercmt = userProfileUrl.split("/")[3];
                     if (userProfileUrl != null && userProfileUrl.startsWith("https://x.com/") && userProfileUrls.size() < Size)
                     if(needcheck == 0) {
-                        String usercmt = userProfileUrl.split("/")[3];
                         if(usercmt.equals(userAd)){
                             System.out.println(userProfileUrl);
                             userProfileUrls.add(userProfileUrl);
                         }
-                    }
+                    } else
                     if(needcheck == 2) {
-                        String usercmt = userProfileUrl.split("/")[3];
                         if(!usercmt.equals(userAd)){
                             System.out.println(userProfileUrl);
                             String profileUrl = "https://x.com/" + usercmt;
@@ -64,6 +63,11 @@ public class Find {
                         System.out.println(userProfileUrl);
                         userProfileUrls.add(userProfileUrl);
                     }
+                    System.out.print("Size: ");
+                    System.out.println(userProfileUrls.size());
+                    System.out.println(needcheck);
+                    System.out.println(userAd + " " + usercmt);
+                    System.out.println(userProfileUrls.size());
                 } catch (Exception e) {
                     continue;
                 }
