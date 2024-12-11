@@ -1,0 +1,215 @@
+package datacollection;
+
+import pagerank.Control;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class FindControl {
+    public static final int D = 7;
+    public static final int MAX = 9999;
+    public static void main (String[] args ) {
+        String[][] accounts = {
+                {"@tran_key666", "Key123456", "ahkey357@gmail.com"},
+                {"@tran_key579", "Key123456", "ahkey579@gmail.com"},
+                {"hust_21503", "hudvat-7qoHfi-todryv", "p.rojecthustoop@gmail.com"},
+                {"HustOop345399", "sundi4-guhMob-dopvun", "pr.ojecthustoop@gmail.com"},
+                {"project3834884", "gAkkoj-xifvy9-zirmuj", "pro.jecthustoop@gmail.com"},
+                {"hust_445531", "Tycdib-behneb-5zavze", "proj.ecthustoop@gmail.com"},
+                {"HustOop568799", "Fifryn-2xavky-tajnev", "proje.cthustoop@gmail.com"},
+        };
+        System.setProperty("webdriver.edge.driver", "msedgedriver.exe");
+        EdgeOptions options = new EdgeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--disable-notifications");
+
+        WebDriver[] driver = new WebDriver[10];
+        WebDriverWait[] wait = new WebDriverWait[10];
+        for (int i = 0; i < D; i++) {
+            driver[i] = new EdgeDriver(options);
+            wait[i] = new WebDriverWait(driver[i], Duration.ofSeconds(60));
+        }
+
+
+        Log L = new Log();
+        WriteFile W = new WriteFile();
+        Find F = new Find();
+        try {
+            ExecutorService executorService = Executors.newFixedThreadPool(D);
+            List<Future<Void>> futures = new ArrayList<>();
+            for (int i = 0; i < accounts.length; i++) {
+                final int index = i;
+                Future<Void> future = executorService.submit(() -> {
+                    L.Log_in(driver[index], wait[index], accounts[index][0], accounts[index][1], accounts[index][2]);
+                    return null;
+                });
+                futures.add(future);
+            }
+
+            for (Future<Void> future : futures) {
+                try {
+                    future.get(); // Chờ cho mỗi task hoàn thành
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+            }
+
+            System.out.println("Dang nhap thanh cong");
+            W.writeToFile("KOL.txt", "", false);
+            try (BufferedReader br = new BufferedReader(new FileReader("hashtag.txt"))) {
+                String acc;
+                System.out.println("findKOL");
+                while ((acc = br.readLine()) != null){
+                    System.out.println(acc);
+                    acc = "https://twitter.com/search?q=%23" + acc + "&src=recent_search_click&f=user";
+                    F.Find_user(driver[0], wait[0], acc, "button[role='button']", "a[href*='/']", 30, 1,
+                    "KOL.txt", driver, 5000, 3300);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            W.writeToFile("tweets.txt", "", false);
+            executorService = Executors.newFixedThreadPool(D);
+
+            futures = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader("KOL.txt"))) {
+                String acc;
+                int driverIndex = 0;
+                while ((acc = br.readLine()) != null) {
+                    String[] parts = acc.split(" ");
+                    String url = parts[parts.length - 1];
+
+                    Future<Void> future = executorService.submit(new FindTaskCallable(driver[driverIndex], wait[driverIndex], url,
+                            "article[role='article']", "a[href*='/status/']", 5, 0,
+                            "tweets.txt", driver, 5000, 2000));
+
+                    futures.add(future);
+
+                    driverIndex = (driverIndex + 1) % D;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (Future<Void> future : futures) {
+                try {
+                    future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+            }
+
+            W.writeToFile("edge.txt", "", false);
+
+            executorService = Executors.newFixedThreadPool(D);
+            futures = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader("tweets.txt"))) {
+                String tweet;
+                int driverIndex = 0;
+                while ((tweet = br.readLine()) != null) {
+
+                    Future<Void> future = executorService.submit(new FindTaskCallable(driver[driverIndex], wait[driverIndex], tweet,
+                            "article[role='article']", "a[href*='/status/']", MAX, 2, "edge.txt",
+                            driver, 5000, 2000));
+
+                    futures.add(future);
+
+                    driverIndex = (driverIndex + 1) % D;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (Future<Void> future : futures) {
+                try {
+                    future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+            }
+
+            W.writeToFile("edge2.txt", "", false);
+            executorService = Executors.newFixedThreadPool(D);
+            futures = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader("tweets.txt"))) {
+                String tweet;
+                int driverIndex = 0;
+                while ((tweet = br.readLine()) != null) {
+                    tweet = tweet + "/retweets";
+                    Future<Void> future = executorService.submit(new FindTaskCallable(driver[driverIndex], wait[driverIndex], tweet,
+                            "button[role='button']", "a[href*='/']", MAX, 2,
+                            "edge2.txt", driver, 3500, 1000));
+
+                    futures.add(future);
+
+                    driverIndex = (driverIndex + 1) % D;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (Future<Void> future : futures) {
+                try {
+                    future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+            }
+        } finally {
+            for (int i = 0; i < D; i++) {
+                driver[i].quit();
+            }
+        }
+        Control.main(args);
+    }
+}
